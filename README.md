@@ -28,3 +28,11 @@ If you want to build the image locally with semver tags, use `./podman.build.sh 
 ## Bug Reports
 
 Feel free to open an issue.
+
+## Thanks
+
+Thank you to:
+
+[voxpelli](https://github.com/voxpelli) for the `node-webmention-testpinger` which was very helpful in testing this https://github.com/voxpelli/node-webmention-testpinger
+
+Aaron Parecki and all of his content on the IndieWeb such as https://aaronparecki.com/2018/06/30/11/your-first-webmention, as well as https://webmention.rocks 
