@@ -1,0 +1,40 @@
+version: '3.9'
+services:
+  redis:
+    name: webmention_redis
+    image: redis
+    ports:
+      - '6379:6379'
+    env_file:
+      - .env
+    volumes:
+      - redis_data:/data
+  db:
+    name: webmention_postgres
+    image: postgres
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  db_adminer:
+    name: webmention_adminer
+    image: docker.io/library/adminer
+    restart: always
+    ports:
+      - 8080:8080
+  app:
+    name: webmention_server
+    image: webmentions
+    environment:
+      - DATABASE_URL=${DB_URL}
+      - REDIS_URL=${REDIS_URL}
+    ports:
+      - '8000:8000'
+    depends_on:
+      - webmention_redis
+      - webmention_db
+volumes:
+  redis_data:
+  db_data:
