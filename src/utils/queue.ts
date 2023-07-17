@@ -77,16 +77,14 @@ webMentionQueue.process(async (job, done) => {
 				}
 			}
 		} else {
-			return done(
-				new Error('source URL does not contain a link to the target URL'),
-			);
+			console.log('source URL does not contain a link to the target URL');
+			return done();
 		}
 	}
 });
 
 webMentionQueue.on('error', (error) => {
 	console.error('job failed with error: ', error);
-	// res.status(400).send(error);
 });
 webMentionQueue.on('progress', (job) => {
 	console.log(job.progress());
@@ -94,7 +92,6 @@ webMentionQueue.on('progress', (job) => {
 
 webMentionQueue.on('completed', (job, result) => {
 	console.log(`job ${job.id} completed with result:`);
-	console.log(result);
 });
 
 export const webMentionGetter = new Queue('webmention getter', redisHost, {

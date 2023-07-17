@@ -11,8 +11,8 @@ export const validate = async (
 		res.status(406);
 	}
 	let target: string, source: string;
-	target = req.body.target || req.query.target
-	source = req.body.source || req.query.source
+	target = req.body.target || req.query.target;
+	source = req.body.source || req.query.source;
 	if (!target || !source) {
 		return res.status(400).json({ message: 'Missing target or source' });
 	} else if (target === source) {
@@ -23,26 +23,30 @@ export const validate = async (
 
 	// 3.2.1 check if target is valid webmention post
 	let targetDOM;
+	let validPermalink: string | undefined;
 	try {
 		const targetRes = await fetch(target, {
 			headers: { 'User-Agent': `${USER_AGENT} Webmention` },
 		});
+		const linkHeader = targetRes.headers.get('Link');
+		if (linkHeader?.includes('rel="webmention"')) {
+			validPermalink = linkHeader;
+		}
 		targetDOM = parse(await targetRes.text());
 	} catch (error) {
 		console.error(error);
 		return res.status(400).json({ message: 'Specified target URL not found' });
 	}
 	const validRel = targetDOM.querySelector('[rel=webmention]');
-	const validPermalink = validRel?.attributes.href;
-	console.log('validPermalink', validPermalink);
+	validPermalink = validPermalink ? validPermalink : validRel?.attributes.href;
+
 	if (!validPermalink) {
 		return res
 			.status(400)
 			.json({ message: 'Specified target does not accept web mentions' });
 	}
 
-	// console.log("validated webmention URL", validPermalink);
-	// TODO: use some sort of queue to process the request
+	console.log('validated webmention URL', validPermalink);
 	res.status(202).json({ message: 'Accepted' });
 	next();
 };

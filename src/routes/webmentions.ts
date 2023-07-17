@@ -6,7 +6,7 @@ export const webmentions = {
 		let target: string, source: string;
 		target = req.body.target || req.query.target;
 		source = req.body.source || req.query.source;
-		await webMentionQueue.add({ target, source });
+		(await webMentionQueue.add({ target, source })).finished();
 
 		return res.end();
 	},
