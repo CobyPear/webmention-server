@@ -10,7 +10,9 @@ export const validate = async (
 	if (!req.accepts('html', 'x-www-form-urlencoded')) {
 		res.status(406);
 	}
-	const { target, source } = req.body;
+	let target: string, source: string;
+	target = req.body.target || req.query.target
+	source = req.body.source || req.query.source
 	if (!target || !source) {
 		return res.status(400).json({ message: 'Missing target or source' });
 	} else if (target === source) {

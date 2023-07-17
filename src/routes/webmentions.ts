@@ -3,7 +3,9 @@ import { webMentionQueue, webMentionGetter } from '../utils/queue';
 
 export const webmentions = {
 	post: async (req: Request, res: Response) => {
-		const { target, source } = req.body;
+		let target: string, source: string;
+		target = req.body.target || req.query.target;
+		source = req.body.source || req.query.source;
 		await webMentionQueue.add({ target, source });
 
 		return res.end();

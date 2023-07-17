@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT || 8000;
 const host = process.env.HOST || 'localhost';
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morganMiddleware);
 
 app.use('/api', routes);
